@@ -340,6 +340,15 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  
+  // Form state
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [bikeType, setBikeType] = useState('MTB');
+  const [description, setDescription] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const monthNames = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -384,14 +393,47 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
     return date < today;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (selectedDateStr && selectedTime) {
-      setFormSubmitted(true);
-    } else if (!selectedDateStr) {
+    if (!selectedDateStr) {
       alert("Por favor, selecciona un día en el calendario.");
-    } else {
+      return;
+    }
+    if (!selectedTime) {
       alert("Por favor, selecciona una franja horaria.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch('/.netlify/functions/create-booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          bikeType,
+          description,
+          date: selectedDateStr,
+          time: selectedTime,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar la reserva');
+      }
+
+      setFormSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitError('Hubo un problema al procesar tu reserva. Por favor, inténtalo de nuevo o contáctanos por WhatsApp.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -445,6 +487,8 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
               <input 
                 required
                 type="text" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Ej. Juan Pérez"
                 className="w-full bg-brand-light-gray border border-brand-light-gray rounded-lg px-4 py-3 focus:border-brand-orange outline-none transition-colors"
               />
@@ -454,6 +498,8 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
               <input 
                 required
                 type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="juan@ejemplo.com"
                 className="w-full bg-brand-light-gray border border-brand-light-gray rounded-lg px-4 py-3 focus:border-brand-orange outline-none transition-colors"
               />
@@ -463,13 +509,19 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
               <input 
                 required
                 type="tel" 
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 placeholder="600 000 000"
                 className="w-full bg-brand-light-gray border border-brand-light-gray rounded-lg px-4 py-3 focus:border-brand-orange outline-none transition-colors"
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-400">Tipo de Bicicleta</label>
-              <select className="w-full bg-brand-light-gray border border-brand-light-gray rounded-lg px-4 py-3 focus:border-brand-orange outline-none transition-colors appearance-none">
+              <select 
+                value={bikeType}
+                onChange={(e) => setBikeType(e.target.value)}
+                className="w-full bg-brand-light-gray border border-brand-light-gray rounded-lg px-4 py-3 focus:border-brand-orange outline-none transition-colors appearance-none"
+              >
                 <option>MTB</option>
                 <option>Carretera</option>
                 <option>E-Bike</option>
@@ -481,6 +533,8 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
             <label className="text-sm font-medium text-gray-400">¿Qué necesita tu bici?</label>
             <textarea 
               rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe brevemente el problema o servicio..."
               className="w-full bg-brand-light-gray border border-brand-light-gray rounded-lg px-4 py-3 focus:border-brand-orange outline-none transition-colors resize-none"
             ></textarea>
@@ -625,15 +679,22 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
         </AnimatePresence>
 
         <div className="flex flex-col items-center pt-6">
+          {submitError && (
+            <div className="w-full max-w-md bg-red-500/10 border border-red-500/50 text-red-500 p-4 rounded-lg mb-6 text-center text-sm">
+              {submitError}
+            </div>
+          )}
           <button 
             type="submit"
-            className="w-full max-w-xs bg-brand-orange hover:bg-orange-600 text-white font-bold py-4 rounded-lg text-xl shadow-lg transition-transform active:scale-95"
+            disabled={isSubmitting}
+            className={`w-full max-w-xs bg-brand-orange hover:bg-orange-600 text-white font-bold py-4 rounded-lg text-xl shadow-lg transition-transform active:scale-95 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            Confirmar Reserva
+            {isSubmitting ? 'Enviando...' : 'Confirmar Reserva'}
           </button>
           <button 
             type="button"
             onClick={onBack}
+            disabled={isSubmitting}
             className="mt-4 text-gray-400 hover:text-white transition-colors"
           >
             Cancelar y volver
