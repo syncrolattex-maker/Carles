@@ -65,7 +65,7 @@ export default function App() {
           
           <div className="flex items-center space-x-4">
             <a 
-              href="https://wa.me/#" 
+              href="https://wa.me/34614085416" 
               className="hidden sm:block text-white hover:text-brand-orange transition-colors"
               aria-label="WhatsApp"
             >
@@ -102,7 +102,7 @@ export default function App() {
                 </button>
               ))}
               <div className="pt-8 flex justify-center space-x-6">
-                <a href="https://wa.me/#" className="text-brand-orange">
+                <a href="https://wa.me/34614085416" className="text-brand-orange">
                   <MessageCircle className="w-10 h-10" />
                 </a>
               </div>
@@ -260,8 +260,8 @@ export default function App() {
                 <span className="w-2 h-6 bg-brand-orange mr-2 rounded-full"></span>
                 Dónde estamos
               </h3>
-              <p className="text-gray-400 mb-2">Carrer de l'Om, 12</p>
-              <p className="text-gray-400 mb-6">46220 Picassent, València</p>
+              <p className="text-gray-400 mb-2">Carrer Gómez Ferrer, 40</p>
+              <p className="text-gray-400 mb-6">46220 Picassent, Valencia</p>
               
               <h3 className="text-xl font-bold mb-4 flex items-center">
                 <span className="w-2 h-6 bg-brand-orange mr-2 rounded-full"></span>
@@ -276,7 +276,7 @@ export default function App() {
             
             <div className="w-full h-64 bg-brand-light-gray rounded-2xl overflow-hidden relative shadow-inner">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12338.40698188172!2d-0.4632895!3d39.3621404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd604f0d3a5a415b%3A0xc62961d9c123386e!2s46220%20Picassent%2C%20Valencia!5e0!3m2!1ses!2ses!4v1715000000000!5m2!1ses!2ses" 
+                src="https://maps.google.com/maps?q=Carrer%20G%C3%B3mez%20Ferrer%2C%2040%2C%2046220%20Picassent%2C%20Valencia&t=&z=15&ie=UTF8&iwloc=&output=embed" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
@@ -293,7 +293,7 @@ export default function App() {
 
       {/* Floating WhatsApp Button */}
       <motion.a 
-        href="https://wa.me/#"
+        href="https://wa.me/34614085416"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         className="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-2xl z-50 text-white"
