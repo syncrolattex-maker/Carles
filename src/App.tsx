@@ -57,10 +57,8 @@ export default function App() {
             className="flex items-center space-x-2 cursor-pointer"
             onClick={() => navigateTo('home')}
           >
-            <div className="w-8 h-8 bg-brand-orange rounded-lg flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white fill-current" />
-            </div>
-            <span className="font-bold text-lg tracking-tight uppercase italic">
+            <img src="/logo.png" alt="Carles Mecànica Logo" className="h-10" />
+            <span className="font-bold text-lg tracking-tight uppercase italic ml-2">
               Carles<span className="text-brand-orange">Mecànica</span>
             </span>
           </div>
@@ -489,7 +487,6 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
           </div>
         </div>
 
-        {/* Calendar Section */}
         <div className="bg-brand-gray p-8 rounded-2xl border border-brand-light-gray space-y-6">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xl font-bold flex items-center text-brand-orange">
