@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ReactNode, useState, FormEvent, useEffect } from 'react';
+import logoImg from './assets/logo.png';
 
 const reviews = [
   {
@@ -99,7 +100,7 @@ export default function App() {
             className="flex items-center cursor-pointer"
             onClick={() => navigateTo('home')}
           >
-            <img src="/logo.png" alt="Carles Mecànica - Taller de Bicicletas en Picassent" className="h-10 md:h-14 object-contain" />
+            <img src={logoImg} alt="Carles Mecànica - Taller de Bicicletas en Picassent" className="h-10 md:h-14 object-contain" />
           </div>
           
           <div className="flex items-center space-x-4">
@@ -321,7 +322,7 @@ export default function App() {
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <div className="mb-8">
-                <img src="/logo.png" alt="Carles Mecànica - Taller de Bicicletas en Picassent" className="h-12 md:h-16 object-contain" />
+                <img src={logoImg} alt="Carles Mecànica - Taller de Bicicletas en Picassent" className="h-12 md:h-16 object-contain" />
               </div>
               <h3 className="text-xl font-bold mb-4 flex items-center">
                 <span className="w-2 h-6 bg-brand-green mr-2 rounded-full"></span>
