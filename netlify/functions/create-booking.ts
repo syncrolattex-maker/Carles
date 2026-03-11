@@ -50,19 +50,24 @@ export const handler: Handler = async (event) => {
           to: "carles.bikeworks@gmail.com",
           subject: `Nueva reserva de taller: ${name}`,
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9;">
-              <h2 style="color: #333; border-bottom: 2px solid #ff6600; padding-bottom: 10px;">¡Nueva reserva en el taller! 🚲</h2>
-              <div style="background-color: #fff; padding: 15px; border-radius: 5px; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <p style="margin: 10px 0;"><strong>👤 Cliente:</strong> ${name}</p>
-                <p style="margin: 10px 0;"><strong>✉️ Email:</strong> <a href="mailto:${email}" style="color: #ff6600;">${email}</a></p>
-                <p style="margin: 10px 0;"><strong>📞 Teléfono:</strong> <a href="tel:${phone}" style="color: #ff6600;">${phone}</a></p>
-                <p style="margin: 10px 0;"><strong>🚲 Tipo de bici:</strong> ${bikeType}</p>
-                <p style="margin: 10px 0;"><strong>📅 Fecha:</strong> ${date}</p>
-                <p style="margin: 10px 0;"><strong>⏰ Hora:</strong> ${time}</p>
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+            </style>
+            <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; background-color: #000000; color: #ffffff;">
+              <h2 style="font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700; text-transform: uppercase; color: #ffffff; border-bottom: 2px solid #00FF88; padding-bottom: 10px; margin-top: 0; letter-spacing: 1px;">NUEVA RESERVA 🚲</h2>
+              
+              <div style="border: 1px solid #333333; padding: 20px; margin-top: 25px;">
+                <p style="margin: 12px 0; color: #cccccc; font-size: 14px; letter-spacing: 0.5px;">CLIENTE: <strong style="color: #ffffff; font-size: 16px;">${name}</strong></p>
+                <p style="margin: 12px 0; color: #cccccc; font-size: 14px; letter-spacing: 0.5px;">EMAIL: <a href="mailto:${email}" style="color: #00FF88; text-decoration: none; font-weight: 600;">${email}</a></p>
+                <p style="margin: 12px 0; color: #cccccc; font-size: 14px; letter-spacing: 0.5px;">TELÉFONO: <a href="tel:${phone}" style="color: #00FF88; text-decoration: none; font-weight: 600;">${phone}</a></p>
+                <p style="margin: 12px 0; color: #cccccc; font-size: 14px; letter-spacing: 0.5px;">BICI: <strong style="color: #ffffff; font-size: 16px;">${bikeType}</strong></p>
+                <p style="margin: 12px 0; color: #cccccc; font-size: 14px; letter-spacing: 0.5px;">FECHA: <strong style="color: #ffffff; font-size: 16px;">${date}</strong></p>
+                <p style="margin: 12px 0; color: #cccccc; font-size: 14px; letter-spacing: 0.5px;">HORA: <strong style="color: #ffffff; font-size: 16px;">${time}</strong></p>
               </div>
-              <div style="background-color: #fff; padding: 15px; border-radius: 5px; margin-top: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <p style="margin: 0; color: #555;"><strong>📝 Descripción / Problema:</strong></p>
-                <p style="margin: 10px 0 0 0; font-style: italic; color: #333;">"${description || 'No especificada'}"</p>
+              
+              <div style="border: 1px solid #333333; padding: 20px; margin-top: 20px; background-color: #111111;">
+                <p style="margin: 0; color: #999999; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">DESCRIPCIÓN / PROBLEMA</p>
+                <p style="margin: 15px 0 0 0; color: #ffffff; line-height: 1.6; font-size: 15px;">"${description || 'No especificada'}"</p>
               </div>
             </div>
           `,
@@ -74,48 +79,53 @@ export const handler: Handler = async (event) => {
           to: email,
           subject: "Confirmación de reserva - Carles Mecànica & Ciclisme",
           html: `
-            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 0; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; background-color: #ffffff;">
-              <div style="background-color: #1a1a1a; padding: 30px 20px; text-align: center;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 1px;">CARLES MECÀNICA & CICLISME</h1>
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+            </style>
+            <div style="font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 0; background-color: #000000; color: #ffffff;">
+              <div style="padding: 40px 20px; text-align: center; border-bottom: 2px solid #00FF88;">
+                <h1 style="font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: #ffffff;">BIKESHOP</h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 3px; color: #999999; text-transform: uppercase; margin: 10px 0 0 0;">CARLES MECÀNICA & CICLISME</p>
               </div>
               
-              <div style="padding: 30px 20px;">
-                <h2 style="color: #333333; margin-top: 0;">¡Hola ${name}! 👋</h2>
-                <p style="color: #555555; font-size: 16px; line-height: 1.5;">Tu reserva en nuestro taller ha sido confirmada correctamente. Estamos listos para dejar tu bicicleta a punto.</p>
+              <div style="padding: 40px 20px;">
+                <h2 style="font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 600; margin-top: 0; text-transform: uppercase; color: #ffffff; letter-spacing: 1px;">CHOOSE YOUR PATH, ${name}</h2>
+                <p style="color: #cccccc; font-size: 16px; line-height: 1.6;">Tu reserva en nuestro taller ha sido confirmada. Estamos listos para dejar tu bicicleta a punto.</p>
                 
-                <div style="background-color: #f8f9fa; border-left: 4px solid #ff6600; padding: 20px; margin: 25px 0; border-radius: 0 8px 8px 0;">
-                  <h3 style="margin-top: 0; color: #333333; font-size: 18px;">Detalles de tu cita</h3>
+                <div style="border: 1px solid #333333; padding: 25px; margin: 35px 0;">
+                  <h3 style="font-family: 'Barlow Condensed', sans-serif; font-size: 22px; margin-top: 0; text-transform: uppercase; color: #00FF88; letter-spacing: 1px;">DETALLES DE TU CITA</h3>
                   <table style="width: 100%; border-collapse: collapse;">
                     <tr>
-                      <td style="padding: 8px 0; color: #666666; width: 120px;"><strong>📅 Fecha:</strong></td>
-                      <td style="padding: 8px 0; color: #333333; font-weight: bold;">${date}</td>
+                      <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #999999; width: 100px; font-size: 14px; letter-spacing: 1px;">FECHA</td>
+                      <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #ffffff; font-weight: 600; font-size: 16px;">${date}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; color: #666666;"><strong>⏰ Hora:</strong></td>
-                      <td style="padding: 8px 0; color: #333333; font-weight: bold;">${time}</td>
+                      <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #999999; font-size: 14px; letter-spacing: 1px;">HORA</td>
+                      <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #ffffff; font-weight: 600; font-size: 16px;">${time}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; color: #666666;"><strong>🚲 Tipo de bici:</strong></td>
-                      <td style="padding: 8px 0; color: #333333;">${bikeType}</td>
+                      <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #999999; font-size: 14px; letter-spacing: 1px;">BICI</td>
+                      <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #ffffff; font-size: 16px;">${bikeType}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; color: #666666;"><strong>🔧 Servicio:</strong></td>
-                      <td style="padding: 8px 0; color: #333333;">${description || 'Revisión general'}</td>
+                      <td style="padding: 12px 0; color: #999999; font-size: 14px; letter-spacing: 1px;">SERVICIO</td>
+                      <td style="padding: 12px 0; color: #ffffff; font-size: 16px;">${description || 'Revisión general'}</td>
                     </tr>
                   </table>
                 </div>
                 
-                <p style="color: #555555; font-size: 15px; line-height: 1.5; background-color: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba;">
-                  ⚠️ <strong>Importante:</strong> Si necesitas modificar o cancelar tu cita, por favor contáctanos por WhatsApp al <a href="https://wa.me/34614085416" style="color: #856404; font-weight: bold; text-decoration: none;">+34 614 08 54 16</a> con la mayor antelación posible.
+                <p style="color: #cccccc; font-size: 15px; line-height: 1.6; padding: 20px; border-left: 3px solid #FF4040; background-color: #111111;">
+                  Si necesitas modificar o cancelar tu cita, por favor contáctanos por WhatsApp al <a href="https://wa.me/34614085416" style="color: #ffffff; font-weight: bold; text-decoration: underline;">+34 614 08 54 16</a>.
                 </p>
                 
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eeeeee; text-align: center;">
-                  <p style="color: #333333; font-weight: bold; margin-bottom: 5px;">¡Te esperamos!</p>
-                  <p style="color: #777777; font-size: 14px; margin-top: 0;">
-                    <strong>Carles Mecànica & Ciclisme</strong><br/>
+                <div style="margin-top: 50px; text-align: center;">
+                  <a href="https://maps.google.com/?q=Carrer+Gómez+Ferrer,+40,+46220+Picassent,+Valencia" style="display: inline-block; padding: 16px 32px; background-color: #00FF88; color: #000000; text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">VER EN GOOGLE MAPS</a>
+                </div>
+                
+                <div style="margin-top: 50px; padding-top: 30px; border-top: 1px solid #333333; text-align: center;">
+                  <p style="color: #666666; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0;">
                     Carrer Gómez Ferrer, 40, 46220 Picassent, Valencia
                   </p>
-                  <a href="https://maps.google.com/?q=Carrer+Gómez+Ferrer,+40,+46220+Picassent,+Valencia" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #1a1a1a; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 14px; font-weight: bold;">📍 Ver en Google Maps</a>
                 </div>
               </div>
             </div>
