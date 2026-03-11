@@ -50,14 +50,21 @@ export const handler: Handler = async (event) => {
           to: "carles.bikeworks@gmail.com",
           subject: `Nueva reserva de taller: ${name}`,
           html: `
-            <h2>¡Tienes una nueva reserva en el taller!</h2>
-            <p><strong>Cliente:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Teléfono:</strong> ${phone}</p>
-            <p><strong>Tipo de bici:</strong> ${bikeType}</p>
-            <p><strong>Fecha:</strong> ${date}</p>
-            <p><strong>Hora:</strong> ${time}</p>
-            <p><strong>Descripción:</strong> ${description || 'No especificada'}</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9;">
+              <h2 style="color: #333; border-bottom: 2px solid #ff6600; padding-bottom: 10px;">¡Nueva reserva en el taller! 🚲</h2>
+              <div style="background-color: #fff; padding: 15px; border-radius: 5px; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <p style="margin: 10px 0;"><strong>👤 Cliente:</strong> ${name}</p>
+                <p style="margin: 10px 0;"><strong>✉️ Email:</strong> <a href="mailto:${email}" style="color: #ff6600;">${email}</a></p>
+                <p style="margin: 10px 0;"><strong>📞 Teléfono:</strong> <a href="tel:${phone}" style="color: #ff6600;">${phone}</a></p>
+                <p style="margin: 10px 0;"><strong>🚲 Tipo de bici:</strong> ${bikeType}</p>
+                <p style="margin: 10px 0;"><strong>📅 Fecha:</strong> ${date}</p>
+                <p style="margin: 10px 0;"><strong>⏰ Hora:</strong> ${time}</p>
+              </div>
+              <div style="background-color: #fff; padding: 15px; border-radius: 5px; margin-top: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <p style="margin: 0; color: #555;"><strong>📝 Descripción / Problema:</strong></p>
+                <p style="margin: 10px 0 0 0; font-style: italic; color: #333;">"${description || 'No especificada'}"</p>
+              </div>
+            </div>
           `,
         });
 
@@ -67,20 +74,51 @@ export const handler: Handler = async (event) => {
           to: email,
           subject: "Confirmación de reserva - Carles Mecànica & Ciclisme",
           html: `
-            <h2>¡Hola ${name}!</h2>
-            <p>Tu reserva en <strong>Carles Mecànica & Ciclisme</strong> ha sido confirmada correctamente.</p>
-            <h3>Detalles de tu cita:</h3>
-            <ul>
-              <li><strong>Fecha:</strong> ${date}</li>
-              <li><strong>Hora:</strong> ${time}</li>
-              <li><strong>Tipo de bici:</strong> ${bikeType}</li>
-              <li><strong>Servicio:</strong> ${description || 'Revisión general'}</li>
-            </ul>
-            <p>Si necesitas modificar o cancelar tu cita, por favor contáctanos por WhatsApp al <strong>+34 614 08 54 16</strong>.</p>
-            <p>¡Te esperamos!</p>
-            <br/>
-            <p><strong>Carles Mecànica & Ciclisme</strong><br/>
-            Carrer Gómez Ferrer, 40, 46220 Picassent, Valencia</p>
+            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 0; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; background-color: #ffffff;">
+              <div style="background-color: #1a1a1a; padding: 30px 20px; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 1px;">CARLES MECÀNICA & CICLISME</h1>
+              </div>
+              
+              <div style="padding: 30px 20px;">
+                <h2 style="color: #333333; margin-top: 0;">¡Hola ${name}! 👋</h2>
+                <p style="color: #555555; font-size: 16px; line-height: 1.5;">Tu reserva en nuestro taller ha sido confirmada correctamente. Estamos listos para dejar tu bicicleta a punto.</p>
+                
+                <div style="background-color: #f8f9fa; border-left: 4px solid #ff6600; padding: 20px; margin: 25px 0; border-radius: 0 8px 8px 0;">
+                  <h3 style="margin-top: 0; color: #333333; font-size: 18px;">Detalles de tu cita</h3>
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                      <td style="padding: 8px 0; color: #666666; width: 120px;"><strong>📅 Fecha:</strong></td>
+                      <td style="padding: 8px 0; color: #333333; font-weight: bold;">${date}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px 0; color: #666666;"><strong>⏰ Hora:</strong></td>
+                      <td style="padding: 8px 0; color: #333333; font-weight: bold;">${time}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px 0; color: #666666;"><strong>🚲 Tipo de bici:</strong></td>
+                      <td style="padding: 8px 0; color: #333333;">${bikeType}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px 0; color: #666666;"><strong>🔧 Servicio:</strong></td>
+                      <td style="padding: 8px 0; color: #333333;">${description || 'Revisión general'}</td>
+                    </tr>
+                  </table>
+                </div>
+                
+                <p style="color: #555555; font-size: 15px; line-height: 1.5; background-color: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba;">
+                  ⚠️ <strong>Importante:</strong> Si necesitas modificar o cancelar tu cita, por favor contáctanos por WhatsApp al <a href="https://wa.me/34614085416" style="color: #856404; font-weight: bold; text-decoration: none;">+34 614 08 54 16</a> con la mayor antelación posible.
+                </p>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eeeeee; text-align: center;">
+                  <p style="color: #333333; font-weight: bold; margin-bottom: 5px;">¡Te esperamos!</p>
+                  <p style="color: #777777; font-size: 14px; margin-top: 0;">
+                    <strong>Carles Mecànica & Ciclisme</strong><br/>
+                    Carrer Gómez Ferrer, 40, 46220 Picassent, Valencia
+                  </p>
+                  <a href="https://maps.google.com/?q=Carrer+Gómez+Ferrer,+40,+46220+Picassent,+Valencia" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #1a1a1a; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 14px; font-weight: bold;">📍 Ver en Google Maps</a>
+                </div>
+              </div>
+            </div>
           `,
         });
         
