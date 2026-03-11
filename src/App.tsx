@@ -287,7 +287,7 @@ export default function App() {
             </div>
           </div>
           <div className="mt-12 text-center text-xs text-gray-500 max-w-7xl mx-auto">
-            © 2024 Carles Mecànica & Ciclisme. Passió per les dues rodes.
+            © 2026 Carles Mecànica & Ciclisme. Passió per les dues rodes.
           </div>
         </footer>
 
