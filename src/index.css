@@ -1,5 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'GT America Compressed';
+  src: url('/fonts/gt-america-compressed-medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 @theme {
   --color-bg-color: #000000;
@@ -12,7 +20,7 @@
   --color-accent-blue: #55E0FF;
   
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "GT America Compressed", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -21,7 +29,7 @@
   }
   
   h1, h2, h3, h4, h5, h6, .logo {
-    @apply font-display font-extrabold uppercase tracking-[-0.05em];
+    @apply font-display font-medium uppercase tracking-normal;
   }
 }
 
