@@ -407,24 +407,6 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   
-  // Booked slots state
-  const [bookedSlots, setBookedSlots] = useState<Record<string, string[]>>(() => {
-    const saved = localStorage.getItem('carles_booked_slots');
-    if (saved) return JSON.parse(saved);
-    
-    // Generate some mock booked slots for demonstration
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    
-    const formatD = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    
-    return {
-      [formatD(today)]: ['10:00', '11:30', '18:00'],
-      [formatD(tomorrow)]: ['12:00', '17:30', '19:00']
-    };
-  });
-  
   // Form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -492,18 +474,25 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
     setSubmitError(null);
 
     try {
-      // Mock API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Update booked slots
-      const updatedSlots = { ...bookedSlots };
-      if (!updatedSlots[selectedDateStr]) {
-        updatedSlots[selectedDateStr] = [];
+      const response = await fetch('/.netlify/functions/create-booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          bikeType,
+          description,
+          date: selectedDateStr,
+          time: selectedTime,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar la reserva');
       }
-      updatedSlots[selectedDateStr].push(selectedTime);
-      
-      setBookedSlots(updatedSlots);
-      localStorage.setItem('carles_booked_slots', JSON.stringify(updatedSlots));
 
       setFormSubmitted(true);
     } catch (error) {
@@ -712,54 +701,42 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
                 <div>
                   <p className="text-xs font-bold text-gray-500 uppercase mb-3">Mañana (10:00 - 14:00)</p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {morningSlots.map(time => {
-                      const isBooked = selectedDateStr && bookedSlots[selectedDateStr]?.includes(time);
-                      return (
-                        <button
-                          key={time}
-                          type="button"
-                          disabled={isBooked}
-                          onClick={() => setSelectedTime(time)}
-                          className={`
-                            py-2 rounded-lg text-sm font-medium transition-all border
-                            ${isBooked 
-                              ? 'bg-red-900/40 border-red-500/30 text-red-400 cursor-not-allowed line-through' 
-                              : selectedTime === time 
-                                ? 'bg-brand-orange border-brand-orange text-white' 
-                                : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
-                          `}
-                        >
-                          {time}
-                        </button>
-                      );
-                    })}
+                    {morningSlots.map(time => (
+                      <button
+                        key={time}
+                        type="button"
+                        onClick={() => setSelectedTime(time)}
+                        className={`
+                          py-2 rounded-lg text-sm font-medium transition-all border
+                          ${selectedTime === time 
+                            ? 'bg-brand-orange border-brand-orange text-white' 
+                            : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
+                        `}
+                      >
+                        {time}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
                 <div>
                   <p className="text-xs font-bold text-gray-500 uppercase mb-3">Tarde (17:00 - 19:30)</p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {afternoonSlots.map(time => {
-                      const isBooked = selectedDateStr && bookedSlots[selectedDateStr]?.includes(time);
-                      return (
-                        <button
-                          key={time}
-                          type="button"
-                          disabled={isBooked}
-                          onClick={() => setSelectedTime(time)}
-                          className={`
-                            py-2 rounded-lg text-sm font-medium transition-all border
-                            ${isBooked 
-                              ? 'bg-red-900/40 border-red-500/30 text-red-400 cursor-not-allowed line-through' 
-                              : selectedTime === time 
-                                ? 'bg-brand-orange border-brand-orange text-white' 
-                                : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
-                          `}
-                        >
-                          {time}
-                        </button>
-                      );
-                    })}
+                    {afternoonSlots.map(time => (
+                      <button
+                        key={time}
+                        type="button"
+                        onClick={() => setSelectedTime(time)}
+                        className={`
+                          py-2 rounded-lg text-sm font-medium transition-all border
+                          ${selectedTime === time 
+                            ? 'bg-brand-orange border-brand-orange text-white' 
+                            : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
+                        `}
+                      >
+                        {time}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
