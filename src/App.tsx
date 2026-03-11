@@ -586,7 +586,7 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-400">Nombre Completo</label>
+              <label className="text-sm font-medium text-gray-400">Nombre Completo <span className="text-brand-green">*</span></label>
               <input 
                 required
                 type="text" 
@@ -597,7 +597,7 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-400">Correo Electrónico</label>
+              <label className="text-sm font-medium text-gray-400">Correo Electrónico <span className="text-brand-green">*</span></label>
               <input 
                 required
                 type="email" 
@@ -608,7 +608,7 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-400">Teléfono</label>
+              <label className="text-sm font-medium text-gray-400">Teléfono <span className="text-brand-green">*</span></label>
               <input 
                 required
                 type="tel" 
