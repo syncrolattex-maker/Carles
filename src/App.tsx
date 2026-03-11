@@ -436,6 +436,7 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
   const monthNames = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -482,6 +483,17 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    
+    // Validate phone
+    const cleanedPhone = phone.replace(/[\s\-\.]/g, '');
+    const phoneRegex = /^(?:(?:\+|00)34)?[6789]\d{8}$/;
+    if (!phoneRegex.test(cleanedPhone)) {
+      setPhoneError('Por favor, introduce un número de teléfono o móvil válido en España (ej. 600 000 000 o 961 000 000).');
+      return;
+    } else {
+      setPhoneError(null);
+    }
+
     if (!selectedDateStr) {
       alert("Por favor, selecciona un día en el calendario.");
       return;
@@ -614,10 +626,14 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
                 required
                 type="tel" 
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  if (phoneError) setPhoneError(null);
+                }}
                 placeholder="600 000 000"
-                className="w-full bg-gray-dark border border-gray-dark rounded-lg px-4 py-3 focus:border-brand-green outline-none transition-colors"
+                className={`w-full bg-gray-dark border ${phoneError ? 'border-red-500 focus:border-red-500' : 'border-gray-dark focus:border-brand-green'} rounded-lg px-4 py-3 outline-none transition-colors`}
               />
+              {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-400">Tipo de Bicicleta</label>
