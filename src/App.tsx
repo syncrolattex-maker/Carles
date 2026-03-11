@@ -136,7 +136,7 @@ export default function App() {
                 <button
                   key={item.name}
                   onClick={item.action}
-                  className="text-3xl font-bold hover:text-brand-green transition-colors py-4 border-b border-gray-dark w-full"
+                  className="text-4xl font-display uppercase tracking-wide hover:text-brand-green transition-colors py-4 border-b border-gray-dark w-full"
                 >
                   {item.name}
                 </button>
