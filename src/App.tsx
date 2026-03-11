@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ReactNode, useState, FormEvent, useEffect } from 'react';
-import logoImg from './assets/logo.png';
+import logoImg from './assets/Logo.png';
 
 const reviews = [
   {
