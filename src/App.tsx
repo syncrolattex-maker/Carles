@@ -18,11 +18,52 @@ import {
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ReactNode, useState, FormEvent } from 'react';
+import { ReactNode, useState, FormEvent, useEffect } from 'react';
+
+const reviews = [
+  {
+    text: "Llevé mi e-bike para una revisión completa y el resultado fue espectacular. Carles es un apasionado de las bicis y se nota en cómo trabaja. Precios muy justos.",
+    name: "Laura G.",
+    role: "Local Guide",
+    initials: "LG"
+  },
+  {
+    text: "Gran profesional, trato cercano y muy rápido. Me solucionó un problema con los frenos que en otros talleres no daban con la tecla. 100% recomendable.",
+    name: "David M.",
+    role: "Cliente",
+    initials: "DM"
+  },
+  {
+    text: "El mejor taller de bicicletas de Picassent y alrededores. Siempre te aconseja lo mejor para tu bici sin intentar venderte cosas innecesarias. Trato de 10.",
+    name: "Carlos R.",
+    role: "Local Guide",
+    initials: "CR"
+  },
+  {
+    text: "Servicio impecable. Me preparó la bici de carretera para una competición y todo fue perfecto. Muy detallista y puntual con las entregas.",
+    name: "Javier T.",
+    role: "Cliente",
+    initials: "JT"
+  },
+  {
+    text: "Descubrí este taller por casualidad y ya no llevo mi bici a otro sitio. Carles es súper amable, te explica todo lo que le hace a la bici y los precios son muy competitivos.",
+    name: "Marta V.",
+    role: "Local Guide",
+    initials: "MV"
+  }
+];
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'bookings'>('home');
+  const [currentReview, setCurrentReview] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentReview((prev) => (prev + 1) % reviews.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -216,24 +257,49 @@ export default function App() {
         </section>
 
         {/* Testimonial Widget */}
-        <section className="py-16 px-6 max-w-4xl mx-auto">
-          <div className="bg-brand-light-gray p-8 rounded-2xl border-l-4 border-brand-orange shadow-xl">
+        <section className="py-16 px-6 max-w-4xl mx-auto overflow-hidden">
+          <div className="bg-brand-light-gray p-8 rounded-2xl border-l-4 border-brand-orange shadow-xl relative min-h-[300px] md:min-h-[250px]">
             <div className="flex text-brand-orange mb-4">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-current" />
               ))}
             </div>
-            <p className="text-lg italic text-white mb-6">
-              "El mejor taller de la zona. Carles es un profesional impecable, me dejó la E-Bike perfecta después de meses con problemas de electrónica. Recomendable 100%."
-            </p>
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center font-bold text-white mr-3">
-                JM
-              </div>
-              <div>
-                <p className="font-bold text-white leading-none">Juan Moreno</p>
-                <p className="text-xs text-gray-400 mt-1">Ciclista de Montaña</p>
-              </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentReview}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.5 }}
+                className="absolute left-8 right-8"
+              >
+                <p className="text-lg italic text-white mb-6">
+                  "{reviews[currentReview].text}"
+                </p>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center font-bold text-white mr-3">
+                    {reviews[currentReview].initials}
+                  </div>
+                  <div>
+                    <p className="font-bold text-white leading-none">{reviews[currentReview].name}</p>
+                    <p className="text-xs text-gray-400 mt-1">{reviews[currentReview].role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+            
+            {/* Carousel Indicators */}
+            <div className="absolute bottom-4 right-8 flex space-x-2">
+              {reviews.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentReview(idx)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    idx === currentReview ? 'bg-brand-orange' : 'bg-gray-600'
+                  }`}
+                  aria-label={`Go to review ${idx + 1}`}
+                />
+              ))}
             </div>
           </div>
         </section>
@@ -341,6 +407,24 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   
+  // Booked slots state
+  const [bookedSlots, setBookedSlots] = useState<Record<string, string[]>>(() => {
+    const saved = localStorage.getItem('carles_booked_slots');
+    if (saved) return JSON.parse(saved);
+    
+    // Generate some mock booked slots for demonstration
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    const formatD = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    
+    return {
+      [formatD(today)]: ['10:00', '11:30', '18:00'],
+      [formatD(tomorrow)]: ['12:00', '17:30', '19:00']
+    };
+  });
+  
   // Form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -408,25 +492,18 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
     setSubmitError(null);
 
     try {
-      const response = await fetch('/.netlify/functions/create-booking', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          bikeType,
-          description,
-          date: selectedDateStr,
-          time: selectedTime,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al enviar la reserva');
+      // Mock API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Update booked slots
+      const updatedSlots = { ...bookedSlots };
+      if (!updatedSlots[selectedDateStr]) {
+        updatedSlots[selectedDateStr] = [];
       }
+      updatedSlots[selectedDateStr].push(selectedTime);
+      
+      setBookedSlots(updatedSlots);
+      localStorage.setItem('carles_booked_slots', JSON.stringify(updatedSlots));
 
       setFormSubmitted(true);
     } catch (error) {
@@ -635,42 +712,54 @@ function BookingsPage({ onBack }: { onBack: () => void }) {
                 <div>
                   <p className="text-xs font-bold text-gray-500 uppercase mb-3">Mañana (10:00 - 14:00)</p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {morningSlots.map(time => (
-                      <button
-                        key={time}
-                        type="button"
-                        onClick={() => setSelectedTime(time)}
-                        className={`
-                          py-2 rounded-lg text-sm font-medium transition-all border
-                          ${selectedTime === time 
-                            ? 'bg-brand-orange border-brand-orange text-white' 
-                            : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
-                        `}
-                      >
-                        {time}
-                      </button>
-                    ))}
+                    {morningSlots.map(time => {
+                      const isBooked = selectedDateStr && bookedSlots[selectedDateStr]?.includes(time);
+                      return (
+                        <button
+                          key={time}
+                          type="button"
+                          disabled={isBooked}
+                          onClick={() => setSelectedTime(time)}
+                          className={`
+                            py-2 rounded-lg text-sm font-medium transition-all border
+                            ${isBooked 
+                              ? 'bg-red-900/40 border-red-500/30 text-red-400 cursor-not-allowed line-through' 
+                              : selectedTime === time 
+                                ? 'bg-brand-orange border-brand-orange text-white' 
+                                : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
+                          `}
+                        >
+                          {time}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
                 <div>
                   <p className="text-xs font-bold text-gray-500 uppercase mb-3">Tarde (17:00 - 19:30)</p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {afternoonSlots.map(time => (
-                      <button
-                        key={time}
-                        type="button"
-                        onClick={() => setSelectedTime(time)}
-                        className={`
-                          py-2 rounded-lg text-sm font-medium transition-all border
-                          ${selectedTime === time 
-                            ? 'bg-brand-orange border-brand-orange text-white' 
-                            : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
-                        `}
-                      >
-                        {time}
-                      </button>
-                    ))}
+                    {afternoonSlots.map(time => {
+                      const isBooked = selectedDateStr && bookedSlots[selectedDateStr]?.includes(time);
+                      return (
+                        <button
+                          key={time}
+                          type="button"
+                          disabled={isBooked}
+                          onClick={() => setSelectedTime(time)}
+                          className={`
+                            py-2 rounded-lg text-sm font-medium transition-all border
+                            ${isBooked 
+                              ? 'bg-red-900/40 border-red-500/30 text-red-400 cursor-not-allowed line-through' 
+                              : selectedTime === time 
+                                ? 'bg-brand-orange border-brand-orange text-white' 
+                                : 'bg-brand-light-gray border-transparent hover:border-brand-orange/50'}
+                          `}
+                        >
+                          {time}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
